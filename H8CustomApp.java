@@ -31,60 +31,50 @@ import java.util.Scanner;
  * @author Winston Chan
  */
 public class H8CustomApp {
+    public static final double INVALID_GRADE = -1.0;
     /**
-     * This method converts and stores the GPA weights on a 4.0 scale into a separate array under
-     * the same index as the subject.
+     * This method converts a letter grade to a numeric GPA grade.
      *
-     * @param semesterSubjectGPA    - double dimensional array for subjects and letter grades
-     * @return double array of GPA grades
+     * @param semesterSubjectGPA    - String letter grade
+     * @return double value of the numeric string letter grade
      */
-    public static double[] convertLetterToGPA(String[][] semesterSubjectGPA) {
-        double[] subjectGPA = new double[semesterSubjectGPA.length];
-        for (int i = 0; i < semesterSubjectGPA.length; i++) {
-            switch (semesterSubjectGPA[i][1]) {
-                case "A":
-                    subjectGPA[i] = 4.0;
-                    break;
-                case "AB":
-                    subjectGPA[i] = 3.5;
-                    break;
-                case "B":
-                    subjectGPA[i] = 3.0;
-                    break;
-                case "BC":
-                    subjectGPA[i] = 2.5;
-                    break;
-                case "C":
-                    subjectGPA[i] = 2.0;
-                    break;
-                case "D":
-                    subjectGPA[i] = 1.0;
-                    break;
-                case "F":
-                    subjectGPA[i] = 0.0;
-                    break;
-                default:
-                    System.out.print("Enter a valid letter grade ");
-            }
+    public static double convertLetterToGPA(String semesterSubjectGPA) {
+        switch (semesterSubjectGPA) {
+            case "A":
+                return 4.0;
+            case "AB":
+                return 3.5;
+            case "B":
+                return 3.0;
+            case "BC":
+                return 2.5;
+            case "C":
+                return 2.0;
+            case "D":
+                return 1.0;
+            case "F":
+                return 0.0;
         }
-        return subjectGPA;
+        return INVALID_GRADE;
     }
 
     /**
      * This method sums the GPA values from the convertLetterToGPA method, and averages it out
      * using the length of the array.
      *
-     * @param subjectGPA    - array of weighted grades in their respective subject index
-     * @return double value of the average GPA this semester
+     * @param twoDimensionalArray   - String array with converted numeric GPA
+     * @return double average
      */
-    public static double averageGPA(double[] subjectGPA) {
-        double totalGPAValue = 0;
-        double avgGPAValue;
-        for (int i = 0; i < subjectGPA.length; i++) {
-            totalGPAValue += subjectGPA[i];
+    public static double computeSemesterGPA(String[][] twoDimensionalArray) {
+        double gpa;
+        double gpaAverage = 0;
+        for(int i = 0; i < twoDimensionalArray.length; i++) {
+            gpa = convertLetterToGPA(twoDimensionalArray[i][1]);
+            if (gpa != -1) {
+                gpaAverage += gpa;
+            }
         }
-        avgGPAValue = totalGPAValue / subjectGPA.length;
-        return avgGPAValue;
+        return gpaAverage / (double)twoDimensionalArray.length;
     }
 
     /**
@@ -99,11 +89,16 @@ public class H8CustomApp {
 
         System.out.println("How many subjects are you taking this semester: ");
         boolean isValid = false;
-        int numOfSubjects = 0;
+        int numOfSubjects = 1;
         while (!isValid) {
             if (scnr.hasNextInt()) {
                 numOfSubjects = scnr.nextInt();
-                isValid = true;
+                if (numOfSubjects >= 1) {
+                    isValid = true;
+                } else {
+                    System.out.println("Invalid input. Please enter a valid positive " +
+                            "integer value.");
+                }
             } else {
                 System.out.println("Invalid input. Please enter a valid integer value.");
                 scnr.nextLine();
@@ -134,10 +129,7 @@ public class H8CustomApp {
             }
         }
 
-        double[] subjectGPA;
-        subjectGPA = convertLetterToGPA(semesterSubjectGPA);
-        double avgGPAValue;
-        avgGPAValue = averageGPA(subjectGPA);
+        double avgGPAValue = computeSemesterGPA(semesterSubjectGPA);
         System.out.println("Your average GPA this semester is " + avgGPAValue);
 
         scnr.close();

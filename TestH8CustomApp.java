@@ -43,27 +43,37 @@ public class TestH8CustomApp {
         {  //test case 1, this checks whether the convertLetterToGPA assigns the correct GPA value
             // to corresponding letter. This checks if B is equal to 3.0 is false.
             double expected = 3.0;
-            String[][] semesterSubjectGPA = new String[1][2];
-            semesterSubjectGPA[0][1] = "B";
-            double[] subjectGPA;
-            subjectGPA = H8CustomApp.convertLetterToGPA(semesterSubjectGPA);
-            double result = subjectGPA[0];
+            String semesterSubjectGPA = "B";
+            double result = H8CustomApp.convertLetterToGPA(semesterSubjectGPA);
             if (Math.abs(result - expected) > 0.0001) {
                 error = true;
                 System.out.println("exampleMethod 1) expected:" + expected + " result:" + result);
             }
         }
 
-        { //test case 2, this checks whether the averageGPA of 3.5 calculation is false.
-            double expected = 3.5;
-            double[] subjectGPA = new double[3];
-            subjectGPA[0] = 3.5;
-            subjectGPA[1] = 4.0;
-            subjectGPA[2] = 3.0;
-            double result = H8CustomApp.averageGPA(subjectGPA);
+        {  //test case 2, this checks whether the convertLetterToGPA assigns the correct GPA value
+            // to corresponding letter. This checks if non-grade scale string input is equal to -1
+            // is false.
+            double expected = H8CustomApp.INVALID_GRADE;
+            String semesterSubjectGPA = "G";
+            double result = H8CustomApp.convertLetterToGPA(semesterSubjectGPA);
             if (Math.abs(result - expected) > 0.0001) {
                 error = true;
                 System.out.println("exampleMethod 2) expected:" + expected + " result:" + result);
+            }
+        }
+
+        { //test case 3, this checks whether the averageGPA of 3.5 calculation is false.
+            double expected = 3.5;
+            String subjectGPA[][] = new String [2][2];
+            subjectGPA[0][0] = "Biology";
+            subjectGPA[0][1] = "A";
+            subjectGPA[1][0] = "Calculus";
+            subjectGPA[1][1] = "B";
+            double result = H8CustomApp.computeSemesterGPA(subjectGPA);
+            if (Math.abs(result - expected) > 0.0001) {
+                error = true;
+                System.out.println("exampleMethod 3) expected:" + expected + " result:" + result);
             }
         }
 
